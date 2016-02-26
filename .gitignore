@@ -63,3 +63,7 @@ target/
 
 # Data
 data/
+
+# lucene
+AllenLucene/.idea/
+AllenLucene/data/
