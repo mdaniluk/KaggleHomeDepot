@@ -91,7 +91,8 @@ public class SearchFiles {
         for (int i=0; i<hits.length; i++) {
             int fileIdx = hits[i].doc;
             Document doc = searcher.doc(fileIdx);
-            String filename = doc.get("filename");
+            File path = new File(doc.get("path"));
+            String filename = path.getName();
             if (filename.equals(uid)) {
                 scores.luceneScore = hits[i].score;
                 scores.inRanking = 1;
