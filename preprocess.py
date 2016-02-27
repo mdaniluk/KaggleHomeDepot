@@ -53,7 +53,7 @@ def get_attributes_as_text(uid, df_attr):
     for _, a in df_attr[df_attr.product_uid == uid].iterrows():
         attr_list.append(' '.join([str(a['name']), str(a['value'])]))
     content = (', '.join(attr_list))
-    return preprocess_text(content.decode('utf8'))
+    return preprocess_text(content.decode('iso-8859-1'))
         
 def create_ngrams_bag(text, n):
     t = text.split()
@@ -97,20 +97,20 @@ if __name__ == '__main__':
     df_all, df_db, df_attr = load_train_and_desc()
 #    create_files_for_lucene(df_db, df_attr)
         
-#    df_all = df_all[:10]
+#    df_all = df_all[:100]
     df_all['lucene_ranking_place'] = \
         (201 - df_all['lucene_ranking_place']) / 200.0
     df_all['prepr_attrs'] = \
         df_all['product_uid'].map(lambda x: get_attributes_as_text(x, df_attr))
     df_all['prepr_descr'] = \
-        df_all['product_description'].map(lambda x: preprocess_text(x.decode('utf8')))
+        df_all['product_description'].map(lambda x: preprocess_text(x.decode('iso-8859-1')))
     df_all['prepr_query'] = \
-        df_all['search_term'].map(lambda x: preprocess_text(x.decode('utf8')))
+        df_all['search_term'].map(lambda x: preprocess_text(x.decode('iso-8859-1')))
     df_all['prepr_title'] = \
-        df_all['product_title'].map(lambda x: preprocess_text(x.decode('utf8')))
+        df_all['product_title'].map(lambda x: preprocess_text(x.decode('iso-8859-1')))
     df_all['prepr_brand'] = \
         df_all['brand'].map(lambda x: \
-        preprocess_text(x.decode('utf8')) if x != None else '')
+        preprocess_text(x.decode('iso-8859-1')) if x != None else '')
     df_all['query_title_common_1_gram'] = \
         df_all.apply(lambda x: \
         count_common_ngrams(x['prepr_query'], x['prepr_title'],1), \
