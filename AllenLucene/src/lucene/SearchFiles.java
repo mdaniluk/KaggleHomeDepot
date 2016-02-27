@@ -42,7 +42,7 @@ public class SearchFiles {
      */
     public static void main(String[] args) throws Exception {
 
-        String index = "data/index_standard";
+        String index = "data/index_stem";
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
         SearchFiles sf = new SearchFiles();
         sf.searcher = new IndexSearcher(reader);
@@ -75,14 +75,14 @@ public class SearchFiles {
 
     class Scores {
         public float luceneScore = (float) 0.0;
-        public int rankingPlace = 21;
+        public int rankingPlace = 201;
         public int inRanking = 0;
     }
 
     public Scores getScore(String q, String uid) throws Exception {
         q = q.trim();
         Query query = parser.parse(QueryParser.escape(q));
-        int numTotalHits = 20;
+        int numTotalHits = 200;
         TopDocs results = searcher.search(query, numTotalHits);
         ScoreDoc[] hits = results.scoreDocs;
 
@@ -104,9 +104,9 @@ public class SearchFiles {
     }
 
     public void calculateScores() throws Exception {
-        String dataPath = "data/train.csv";
+        String dataPath = "data/test.csv";
         readData(dataPath);
-        String outputPath = "data/lucene_features.csv";
+        String outputPath = "data/lucene_stem_test.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(outputPath));
 
         for (int i=0; i<id.size(); i++) {

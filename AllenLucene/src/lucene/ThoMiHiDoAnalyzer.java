@@ -40,10 +40,10 @@ public final class ThoMiHiDoAnalyzer extends StopwordAnalyzerBase {
     protected TokenStreamComponents createComponents(String fieldName) {
         final Tokenizer source = new StandardTokenizer();
         TokenStream result = new StandardFilter(source);
-        //result = new EnglishPossessiveFilter(result);
+        result = new EnglishPossessiveFilter(result);
         result = new LowerCaseFilter(result);
         result = new StopFilter(result, stopwords);
-        //result = new PorterStemFilter(result);
+        result = new PorterStemFilter(result);
         //result = new SynonymFilter(result, this.synonymMap, true);
         return new TokenStreamComponents(source, result);
     }

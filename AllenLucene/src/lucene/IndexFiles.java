@@ -59,7 +59,7 @@ public class IndexFiles {
      * Index all text files under a directory.
      */
     public static void main(String[] args) {
-        String indexPath = "data/index_standard";
+        String indexPath = "data/index_stem";
         String docsPath = "data/files";
         boolean create = true;
 
