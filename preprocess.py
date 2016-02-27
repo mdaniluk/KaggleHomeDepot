@@ -5,7 +5,6 @@ Created on Fri Feb 26 11:16:03 2016
 @author: dudu
 """
 
-import numpy as np
 import pandas as pd
 import os
 
@@ -16,16 +15,14 @@ from nltk.stem.porter import PorterStemmer
 stop = stopwords.words('english')
 
 def load_train_and_desc():
-    df_train = pd.read_csv('data/train.csv', encoding="ISO-8859-1")
-#    df_test = pd.read_csv('data/test.csv', encoding="ISO-8859-1")
-    df_lucene_features = pd.read_csv('AllenLucene/data/lucene_features_stem.csv', \
+#    df_all = pd.read_csv('data/train.csv', encoding="ISO-8859-1")
+    df_all = pd.read_csv('data/test.csv', encoding="ISO-8859-1")
+    df_lucene_features = pd.read_csv('AllenLucene/data/lucene_stem_test.csv', \
         names=['id', 'in_top_lucene', 'lucene_ranking_place', 'lucene_score'])
     df_pro_desc = pd.read_csv('data/product_descriptions.csv')
     df_attr = pd.read_csv('data/attributes.csv')
     df_brand = df_attr[df_attr.name == "MFG Brand Name"]\
     [["product_uid", "value"]].rename(columns={"value": "brand"})
-#    df_all = pd.concat((df_train, df_test), axis=0, ignore_index=True)
-    df_all = df_train
     df_all = pd.merge(df_all, df_lucene_features, how='left', on='id')
     df_all = pd.merge(df_all, df_pro_desc, how='left', on='product_uid')
     df_all = pd.merge(df_all, df_brand, how='left', on='product_uid')
@@ -53,7 +50,7 @@ def get_attributes_as_text(uid, df_attr):
     for _, a in df_attr[df_attr.product_uid == uid].iterrows():
         attr_list.append(' '.join([str(a['name']), str(a['value'])]))
     content = (', '.join(attr_list))
-    return preprocess_text(content.decode('iso-8859-1'))
+    return preprocess_text(content)
         
 def create_ngrams_bag(text, n):
     t = text.split()
@@ -84,13 +81,20 @@ def calculate_avg_tf(query, text, ngram):
     
     
 def preprocess_text(text):
-    stemmer = PorterStemmer()
-    words = word_tokenize(text)
-    processed_text = []
-    for w in words:
-        if w not in stop:
-            processed_text.append(stemmer.stem(w.lower()))
-    return ' '.join(processed_text)
+    try:
+        text = str(text)
+        text = text.decode('iso-8859-1')
+        stemmer = PorterStemmer()
+        words = word_tokenize(text)
+        processed_text = []
+        for w in words:
+            if w not in stop:
+                processed_text.append(stemmer.stem(w.lower()))
+        return ' '.join(processed_text)
+    except Exception as e:
+        print 'Exception!'
+        print e
+        return ''
     
         
 if __name__ == '__main__':
@@ -103,14 +107,14 @@ if __name__ == '__main__':
     df_all['prepr_attrs'] = \
         df_all['product_uid'].map(lambda x: get_attributes_as_text(x, df_attr))
     df_all['prepr_descr'] = \
-        df_all['product_description'].map(lambda x: preprocess_text(x.decode('iso-8859-1')))
+        df_all['product_description'].map(lambda x: preprocess_text(x))
     df_all['prepr_query'] = \
-        df_all['search_term'].map(lambda x: preprocess_text(x.decode('iso-8859-1')))
+        df_all['search_term'].map(lambda x: preprocess_text(x))
     df_all['prepr_title'] = \
-        df_all['product_title'].map(lambda x: preprocess_text(x.decode('iso-8859-1')))
+        df_all['product_title'].map(lambda x: preprocess_text(x))
     df_all['prepr_brand'] = \
         df_all['brand'].map(lambda x: \
-        preprocess_text(x.decode('iso-8859-1')) if x != None else '')
+        preprocess_text(x) if x != None else '')
     df_all['query_title_common_1_gram'] = \
         df_all.apply(lambda x: \
         count_common_ngrams(x['prepr_query'], x['prepr_title'],1), \
@@ -168,19 +172,9 @@ if __name__ == '__main__':
     'query_title_avg_1_gram_tf', 'query_title_avg_2_gram_tf', \
     'query_descr_avg_1_gram_tf', 'query_descr_avg_2_gram_tf']]
     
-    df_relevance = df_all[['id', 'relevance']]
+#    df_relevance = df_all[['id', 'relevance']]
     
-    df_features.to_csv('data/train_features.csv')
-    df_features.to_csv('data/train_relevance.csv')
+    df_features.to_csv('data/test_features.csv', index=False)
+#    df_relevance.to_csv('data/train_relevance.csv', index=False)
 
         
-        
-        
-            
-        
-    
-        
-        
-    
-    
-    
