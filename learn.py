@@ -12,6 +12,7 @@ from sklearn.svm import SVR
 from sklearn.grid_search import GridSearchCV
 from sklearn.kernel_ridge import KernelRidge
 
+
 def load_data():
     df_x_train = pd.read_csv('data/train_features.csv')
     df_y_train = pd.read_csv('data/train_relevance.csv')
@@ -35,13 +36,46 @@ def save_submission(Yp):
     df.to_csv('data/my_submission.csv', index=False)
     
 def learn_svr(X,Y,Xt):
+    print ('learn')
     clf = SVR()
-    clf.fit(X,Y)
+    clf.fit(X,Y.squeeze())
+    print ('predict')
     Yp = clf.predict(Xt)
     Yp_clamped = np.array([clamp_1_3(x) for x in Yp])
     return Yp_clamped
+
+def learn_svr_grid_search(X,Y,Xt):
+    print ('learn')
+    svr = GridSearchCV(SVR(kernel='rbf', gamma=0.1), cv=5,
+                   param_grid={"C": [1e0, 1e1, 1e2, 1e3],
+                               "gamma": np.logspace(-2, 2, 5)})
+                               
     
+#    kr = GridSearchCV(KernelRidge(kernel='rbf', gamma=0.1), cv=5,
+#                  param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3],
+#                              "gamma": np.logspace(-2, 2, 5)})
+                              
+    svr.fit(X,Y.squeeze())
+    print ('predict')
+    Yp = svr.predict(Xt)
+    Yp_clamped = np.array([clamp_1_3(x) for x in Yp])
+    return Yp_clamped
+    
+def learn_kernel_ridge(X,Y,Xt):
+    print ('learn')
+    kr = GridSearchCV(KernelRidge(kernel='rbf', gamma=0.1), cv=5,
+                  param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3],
+                              "gamma": np.logspace(-2, 2, 5)})
+                              
+    kr.fit(X,Y.squeeze())
+    print ('predict')
+    Yp = kr.predict(Xt)
+    Yp_clamped = np.array([clamp_1_3(x) for x in Yp])
+    return Yp_clamped
+    
+                             
 if __name__ == '__main__':
     X,Y,Xt = load_data()
-    Yp = learn_svr(X,Y,Xt)
+    Yp = learn_kernel_ridge(X,Y,Xt)
+    print('save')
     save_submission(Yp)
