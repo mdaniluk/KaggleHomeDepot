@@ -44,11 +44,20 @@
     \end{block}
     %
     \begin{block}{IR algorithm: Lucene}
-     Some content
+We decided to use Apache Lucene because members of the team were used to it. It is a little bit more complicated version of tf-idf. It is used for instance by ElasticSearch.
+\\ We run a script to build an index which lets to know the difference frequence of words in each file. It is then easy to know which products fits the best the query.
+
+
+
     \end{block}
     %
 \begin{block}{Results}
-      Some content
+\small
+      The competition leaderbord is based on a score computed on the Root mean Squared error compare to the score given human raters:
+\begin{equation}
+RMSE=\frac{1}{size(TestSet)} \sum_{(q_{i},p_{i})} (scorePredicted(q_{i},p_{i})-TrueHumanScore(q_{i},p_{i}))^{2}
+\end{equation}
+We are currently 885 over 1380 reaching a RMSE of 0.4913. The gap with 400th rank is only of 0.01.
     \end{block}
 \end{column} 
     
@@ -63,13 +72,20 @@ The task is thus to try to mimick the process made by a human rater to judge the
 \item some \textbf{descriptions of the different products} and some additional informations
 \item\textbf{a training set} where we have access to the average grade given by a judge to a pair query-product returned by the algorithm
 \item a test set where we need to \textbf{predict the relevance score for a particular pair query-product}
+\end{itemize}
+\textbf{Size of data sets}:
+\begin{itemize}
+\item product descriptions: we have 125000 product's description. 
+\item training set: we have 74068 trio query-product-relevance score
+\item test set: we need to predict the score of 16600 pairs of query-product
 \end{itemize}     
 
 
     \end{block}
 % 
- \begin{block}{Different features}
-     Some Content
+ \begin{block}{Feature Engineering}
+With different query on our Lucene algorithm, we built 32 features:
+
     \end{block}
     % 
   \begin{block}{Ways of improvement}
@@ -80,12 +96,32 @@ The task is thus to try to mimick the process made by a human rater to judge the
   \begin{column}[t]{\postercolumnwidth}
     \centering
      \begin{block}{Preprocessing}
-     
+ \small
+The idea of our agorithm was to build our own search engine and then try to see the results of the query. we then check the rank of the product we want to match in the query result to build a feature. We try to build different scores and then try to unify them through the training of a regressor on the training set provided by Home Depot. 
+\\Preprocessing steps to build our IR algorithm (use of several python libraries): 
+\begin{itemize}
+\item nltk word tokenization: just tokenize the data
+\item stopwords removal: delete all the useless words in the description of the product
+\item porter stemming: our IR algorithm will be based of frequences of words: thus stemming lets to avoid having lot of different words of the same family with small frequences
+\item create a text fil for each product
+\end{itemize}
+   
     \end{block}
 
 
     \begin{block}{Machine Learning algorithm}
-      Some Content
+\small
+To try to train build our predicter on the different features we build we tried to train several algorithms. In all cases, we used the algorithms pre-implemented in scikitlearn.  
+\begin{itemize}
+\item Single Vector Machine regressor
+\item Random Forest 
+\item Adaboost regressor
+In all cases, we implemented grid search to try to find best parameters
+
+
+\end{itemize}
+
+
     \end{block} 
 
     \begin{block}{Conclusion}
