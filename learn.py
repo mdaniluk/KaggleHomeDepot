@@ -66,13 +66,11 @@ def learn_svr_grid_search(X,Y,Xt):
     print ('learn')
     svr = GridSearchCV(SVR(kernel='rbf', gamma=0.1), cv=5,param_grid={"C": [1e0, 1e1, 1e2, 1e3],
                                "gamma": np.logspace(-2, 2, 5)})
-                               
-    
-#    kr = GridSearchCV(KernelRidge(kernel='rbf', gamma=0.1), cv=5,
-#                  param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3],
-#                              "gamma": np.logspace(-2, 2, 5)})
                               
-    svr.fit(X,Y.squeeze())
+    svr.fit(X[1:1000],Y.squeeze()[1:1000])
+    print(svr.best_score_)
+    print(svr.best_estimator_.gamma)
+    print(svr.best_estimator_.C)
     print ('predict')
     Yp = svr.predict(Xt)
     Yp_clamped = np.array([clamp_1_3(x) for x in Yp])
@@ -84,7 +82,7 @@ def learn_kernel_ridge(X,Y,Xt):
                   param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3],
                               "gamma": np.logspace(-2, 2, 5)})
                               
-    kr.fit(X,Y.squeeze())
+    kr.fit(X[1:20000,:],Y[1:20000,:])
     print ('predict')
     Yp = kr.predict(Xt)
     Yp_clamped = np.array([clamp_1_3(x) for x in Yp])
@@ -93,6 +91,7 @@ def learn_kernel_ridge(X,Y,Xt):
                              
 if __name__ == '__main__':
     X,Y,Xt = load_data()
+
     Yp = adaboost_regressor(X,Y,Xt)
-    print('save')
+
     save_submission(Yp)
