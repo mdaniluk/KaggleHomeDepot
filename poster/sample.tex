@@ -1,0 +1,249 @@
+\documentclass{beamer}
+\usetheme{ucl}
+
+%%% Increase the height of the banner: the argument is a scale factor >=1.0
+% \setbeamertemplate{banner}[ucl][1.5]
+
+%%% Change the colour of the main banner
+%%% The background should be one of the UCL colours (except pink or white):
+%%%   black,darkpurple,darkred,darkblue,darkgreen,darkbrown,richred,midred,
+%%%   navyblue,midgreen,darkgrey,orange,brightblue,brightgreen,lightgrey,
+%%%   lightpurple,yellow,lightblue,lightgreen,stone
+% \setbeamercolor{banner}{bg=darkpurple}
+% \setbeamercolor{banner}{bg=yellow,fg=black}
+
+%%% Add a stripe behind the banner
+% \setbeamercolor{banner stripe}{bg=brightblue,fg=black}
+
+%%% The main structural elements
+% \setbeamercolor{structure}{fg=black}
+
+%%% Author/Title/Date and slide number in the footline
+% \setbeamertemplate{footline}[author title date]
+
+%%% Puts the section/subsection in the headline
+% \setbeamertemplate{headline}[section]
+
+%%% Puts a navigation bar on top of the banner
+%%% For this to work correctly, the each \section command needs to be
+%%% followed by a \subsection. Requires one extra compile.
+% \setbeamertemplate{headline}[miniframes]
+%%% Accepts an optional argument determining the width
+% \setbeamertemplate{headline}[miniframes][0.3\paperwidth]
+
+
+%%% Puts the frame title in the banner
+%%% Won't work correctly with the above headline templates
+% \useoutertheme{ucltitlebanner}
+%%% Similar to above, but smaller (and puts subtitle on same line as title)
+% \useoutertheme[small]{ucltitlebanner}
+
+%%% Gives block elements (theorems, examples) a border
+% \useinnertheme{blockborder}
+%%% Sets the body of block elements to be clear
+% \setbeamercolor{block body}{bg=white,fg=black}
+
+%%% Include CSML logo on title slide
+% \titlegraphic{\includegraphics[width=0.16\paperwidth]{csml_logo}}
+
+%%% Include CSML logo in bottom right corner of all slides
+% \logo{\includegraphics[width=0.12\paperwidth]{csml_logo}}
+
+%%% Set a background colour
+% \setbeamercolor{background canvas}{bg=lightgrey}
+
+%%% Set a background image
+%%% Some sample images are available from the UCL image store:
+%%%   https://www.imagestore.ucl.ac.uk/home/start
+% \setbeamertemplate{background canvas}{%
+%   \includegraphics[width=\paperwidth]{imagename}}
+
+
+
+%%%%%% Some other settings that can make things look nicer
+%%% Set a smaller indent for description environment
+\setbeamersize{description width=2em}
+%%% Remove nav symbols (and shift any logo down to corner)
+\setbeamertemplate{navigation symbols}{\vspace{-2ex}} 
+
+
+
+\title[Short Title]{Title of the Presentation}
+\author[Auth. 1 \and Auth.2]{Author 1 \and Author 2}
+\institute[UCL]{%
+  Department of Statistical Science \\ %
+  University College London
+}
+\date{28th January 2011}
+
+\begin{document}
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Section 1}
+\subsection{First subsection}
+
+\begin{frame}
+  \frametitle{First Slide}
+  \begin{itemize}
+  \item 1
+  \item 2
+    \pause
+  \item \alert{Alert!!}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Second Slide}
+  \framesubtitle{with a subtitle}
+  \begin{alertblock}{Help!}
+    text here
+    \begin{itemize}
+    \item point 1
+    \end{itemize}
+  \end{alertblock}
+  
+  \begin{example}
+    \begin{itemize}
+    \item 3
+    \item 4
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+%%% Can be a bit much UCL
+%%% from here on, remove branding from banners
+\setbeamertemplate{banner}[blank]
+
+\section{Section 2}
+\subsection{Second subsection}
+
+\frame {
+  \frametitle{Third Slide}
+  \begin{enumerate}
+  \item 1
+  \item 2 
+  \end{enumerate}
+  \begin{theorem}
+    This is a result.
+  \end{theorem}
+
+  \[
+  x_i = y_i + \varepsilon_i
+  \]
+}
+
+
+\frame {
+  \frametitle{Conclusions}
+  \begin{block}{A block}
+    An environment inside the block
+    \begin{description}
+    \item[The first step:] This is a very long description, and will wrap onto
+      the next line
+    \item[Step B:] text
+    \end{description}
+
+    \begin{itemize}
+    \item a
+    \item b
+    \end{itemize}
+  \end{block}
+  \begin{itemize}
+  \item 
+  \item 
+  \item
+  \item
+  \item
+  \item
+  \item 
+  \end{itemize}
+}
+
+
+
+%%% Customise the banner using a department headline slogan
+
+\section{Headline customisation}
+
+%%% use department headline template
+\setbeamertemplate{headline}[department]
+
+%%% set department and subdepartment
+\setbeamertemplate{department}{Department of Sample Science}
+\setbeamertemplate{subdepartment}{Subdepartment slogan}
+
+%%% customise the fonts
+\setbeamerfont{section in head/foot}{shape=\scshape,size=\scriptsize,series=\bfseries}
+\setbeamerfont{subsection in head/foot}{shape=\scshape,size=\tiny,series=\bfseries}
+
+%%% customise the colors
+\setbeamercolor{section in head/foot}{fg=white}
+\setbeamercolor{subsection in head/foot}{fg=banner.fg!80!banner.bg}
+
+%%% UCL logo can also be customised
+\setbeamertemplate{banner}[ucl]
+\setbeamercolor{banner}{bg=black}
+\setbeamercolor{banner stripe}{bg=brightblue,fg=black}
+
+\begin{frame}
+  \frametitle{Slide with custom headline}
+\end{frame}
+
+
+
+%%% Customise the slide counter in the footline
+
+\section{Slide counters}
+
+%%% use footline template
+\setbeamertemplate{footline}[author title date]
+\setbeamercolor{footline}{use=banner, bg=black, fg=banner.fg!80!banner.bg}
+
+%%% frame/total: show frame number and total number of frames
+\begin{frame}{Slide counters}
+  \framesubtitle{\texttt{frametotal} is the default}
+  Three templates for the slide counter in the footline are available:
+  \begin{itemize}
+    \item \texttt{frametotal} prints the current frame number and the total number (default)
+    \item \texttt{frameonly} prints the current frame number only
+    \item \texttt{empty} does not print a slide counter
+  \end{itemize}
+\end{frame}
+
+\setbeamertemplate{slide counter}[frameonly]
+\begin{frame}{Slide counters}
+  \framesubtitle{A slide with \texttt{frameonly} slide counter}    
+\end{frame}
+
+\setbeamertemplate{slide counter}[empty]
+\begin{frame}{Slide counters}
+  \framesubtitle{A slide with \texttt{empty} slide counter}
+\end{frame}
+
+\setbeamertemplate{slide counter}[frameonly][Slide]
+\begin{frame}{Slide counters}
+  \framesubtitle{Optional argument can be printed in front of the current number}
+  \texttt{frametotal} and \texttt{frameonly} take an optional argument
+  to be printed in front of the current number (e.g. 'Slide').
+\end{frame}
+
+\setbeamertemplate{slide counter}[frametotal][Slide]
+\begin{frame}{Slide counters}
+  \framesubtitle{Optional argument with \texttt{frametotal}}
+\end{frame}
+
+%%% switch back to plain headline/footline
+\setbeamertemplate{banner}[blank]
+\setbeamertemplate{headline}[ucl]
+\setbeamertemplate{slide counter}[frametotal]
+
+\frame {
+  \frametitle{Acknowledgements}
+
+}
+
+\end{document}

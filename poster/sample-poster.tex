@@ -1,0 +1,89 @@
+\documentclass{beamer} 
+\usepackage[orientation=landscape,size=a1]{beamerposter}
+
+\usetheme{uclposter}
+
+
+\useinnertheme{blockborder}
+\setbeamercolor{block body}{bg=white,fg=black}
+
+
+\title{Home Depot Kaggle Competition: building a search engine for products}
+\author{Michal Daniluk, Dorota Kapturkiewicz and Thomas Nedelec}
+\institute{%
+  Department of Computing Science,
+  University College London
+}
+
+% \beamertemplategridbackground[1cm]
+
+\setbeamersize{text margin left=2cm,text margin right=2cm}
+
+\newlength\blockcolsep
+\setlength\blockcolsep{2ex}
+\newlength\postercolumnsep
+\setlength\postercolumnsep{2cm}
+
+\newlength\postercolumnwidth
+\setlength\postercolumnwidth{0.3333\textwidth-0.66666\postercolumnsep}
+
+\newlength\totalwidth
+\setlength\totalwidth{\textwidth+3ex}
+
+\begin{document}
+\begin{frame}[t]{}
+\centering
+\begin{columns}[totalwidth=\totalwidth]
+  \begin{column}[t]{\postercolumnwidth}
+    \centering
+    \begin{block}{Problem}
+      Some content
+    \end{block}
+    %
+    \begin{block}{IR algorithm: Lucene}
+      Some content
+    \end{block}
+    %
+\begin{block}{Results}
+      Some content
+    \end{block}
+\end{column} 
+    
+  %
+  \begin{column}[t]{\postercolumnwidth}
+    \centering
+\begin{block}{Datasets available}
+     Some content
+    \end{block}
+% 
+ \begin{block}{Different features}
+     Some Content
+    \end{block}
+    % 
+  \begin{block}{Ways of improvement}
+    Some content
+    \end{block}
+  \end{column}
+  %
+  \begin{column}[t]{\postercolumnwidth}
+    \centering
+     \begin{block}{Preprocessing}
+      Some Content
+    \end{block}
+
+
+    \begin{block}{Machine Learning algorithm}
+      Some Content
+    \end{block} 
+
+    \begin{block}{Conclusion}
+      Some Content
+    \end{block}
+  \end{column}
+ \end{columns}
+
+\end{frame}
+
+
+
+\end{document}

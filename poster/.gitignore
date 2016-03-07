@@ -1,0 +1,9 @@
+*.aux
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.toc
+!banners/*.pdf
+!csml_logo.pdf
