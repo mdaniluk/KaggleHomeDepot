@@ -84,7 +84,17 @@ The task is thus to try to mimick the process made by a human rater to judge the
     \end{block}
 % 
  \begin{block}{Feature Engineering}
-With different query on our Lucene algorithm, we built 32 features:
+We combined features based on Lucene together with traditional NLP features like words n-grams. Examples of our features are as follows:
+
+\begin{itemize}
+
+\item place of an answer in Lucene ranking crated for given query
+\item Lucene score of an answer for given query
+\item fraction of 1-grams/ 2-grams from query in answer's description/title/brand/attributes
+\item average frequency of 1-grams/ 2-grams in answer's description/title 
+
+
+\end{itemize}
 
     \end{block}
     % 
