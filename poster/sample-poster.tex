@@ -37,11 +37,14 @@
   \begin{column}[t]{\postercolumnwidth}
     \centering
     \begin{block}{Problem}
-      Some content
+\small
+ The goal of this competition is not to improve the Search Engine of Home Depot. 
+\\ The aim is to design a tool that lets to \textbf{evaluate the quality of a search engine algorithm}. \\Home Depot is using the search relevancy to qualify the quality of a new algorithm. For some queries on the Home Depot website, the IR systems is outputing some particular Home DepoT product and \textbf{several human raters} to give a grade betwen 1 and 3 to judge the revelancy of the product according to the query. 
+\\The aim of the competition is to try to \textbf{automatize this judging process}. It will hep to increase the number of search engine algorithms that Home Depot is able to test.
     \end{block}
     %
     \begin{block}{IR algorithm: Lucene}
-      Some content
+     Some content
     \end{block}
     %
 \begin{block}{Results}
@@ -53,7 +56,16 @@
   \begin{column}[t]{\postercolumnwidth}
     \centering
 \begin{block}{Datasets available}
-     Some content
+\small
+The task is thus to try to mimick the process made by a human rater to judge the quality of an output according to a particular query. For the task, we are provided several datasets: 
+\begin{itemize}
+\item the instructions given to a human rater 
+\item some \textbf{descriptions of the different products} and some additional informations
+\item\textbf{a training set} where we have access to the average grade given by a judge to a pair query-product returned by the algorithm
+\item a test set where we need to \textbf{predict the relevance score for a particular pair query-product}
+\end{itemize}     
+
+
     \end{block}
 % 
  \begin{block}{Different features}
@@ -68,7 +80,7 @@
   \begin{column}[t]{\postercolumnwidth}
     \centering
      \begin{block}{Preprocessing}
-      Some Content
+     
     \end{block}
 
 
