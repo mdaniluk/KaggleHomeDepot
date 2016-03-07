@@ -11,7 +11,8 @@ import pandas as pd
 from sklearn.svm import SVR
 from sklearn.grid_search import GridSearchCV
 from sklearn.kernel_ridge import KernelRidge
-
+from sklearn.ensemble import RandomForestRegressor,BaggingRegressor
+from sklearn.ensemble import AdaBoostRegressor
 
 def load_data():
     df_x_train = pd.read_csv('data/train_features.csv')
@@ -44,10 +45,26 @@ def learn_svr(X,Y,Xt):
     Yp_clamped = np.array([clamp_1_3(x) for x in Yp])
     return Yp_clamped
 
+def random_forest(X,Y,Xt):
+    print('learn')    
+    rf = RandomForestRegressor(n_estimators=15, max_depth=6, random_state=0)
+    clf = BaggingRegressor(rf, n_estimators=45, max_samples=0.1, random_state=25)
+    clf.fit(X, Y)
+    print('predict')
+    Yp_clamped = clf.predict(Xt)
+    return Yp_clamped
+    
+def adaboost_regressor(X,Y,Xt):
+    print('learn')
+    ada=GridSearchCV(AdaBoostRegressor(base_estimator=None, loss='square', random_state=0),cv=5,param_grid={'learning_rate':[0.001,0.01,0.1,1.0],'n_estimators':[40,50]})
+    ada.fit(X,Y)
+    print('predict')
+    Yp_clamped=ada.predict(Xt)
+    return Yp_clamped
+
 def learn_svr_grid_search(X,Y,Xt):
     print ('learn')
-    svr = GridSearchCV(SVR(kernel='rbf', gamma=0.1), cv=5,
-                   param_grid={"C": [1e0, 1e1, 1e2, 1e3],
+    svr = GridSearchCV(SVR(kernel='rbf', gamma=0.1), cv=5,param_grid={"C": [1e0, 1e1, 1e2, 1e3],
                                "gamma": np.logspace(-2, 2, 5)})
                                
     
@@ -76,6 +93,6 @@ def learn_kernel_ridge(X,Y,Xt):
                              
 if __name__ == '__main__':
     X,Y,Xt = load_data()
-    Yp = learn_kernel_ridge(X,Y,Xt)
+    Yp = adaboost_regressor(X,Y,Xt)
     print('save')
     save_submission(Yp)
