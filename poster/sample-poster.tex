@@ -8,7 +8,7 @@
 \setbeamercolor{block body}{bg=white,fg=black}
 
 
-\title{Home Depot Kaggle Competition: building a search engine for products}
+\title{Home Depot Kaggle Competition: building a system to mimick human raters relevance process}
 \author{Michal Daniluk, Dorota Kapturkiewicz and Thomas Nedelec}
 \institute{%
   Department of Computing Science,
@@ -40,13 +40,27 @@
 \small
  The goal of this competition is not to improve the Search Engine of Home Depot. 
 \\ The aim is to design a tool that lets to \textbf{evaluate the quality of a search engine algorithm}. \\Home Depot is using the search relevancy to qualify the quality of a new algorithm. For some queries on the Home Depot website, the IR systems is outputing some particular Home DepoT product and \textbf{several human raters} to give a grade betwen 1 and 3 to judge the revelancy of the product according to the query. 
-\\The aim of the competition is to try to \textbf{automatize this judging process}. It will hep to increase the number of search engine algorithms that Home Depot is able to test.
-    \end{block}
+\\The aim o
+f the competition is to try to \textbf{automatize this judging process}. It will hep to increase the number of search engine algorithms that Home Depot is able to test.
+    
+ \begin{figure}[H]
+\center
+\includegraphics[width=0.5\textwidth]{home_depot_tools}
+\caption{ Panorama built with three pictures}
+\end{figure}
+    
+\end{block}
     %
     \begin{block}{IR algorithm: Lucene}
+\small
 We decided to use Apache Lucene because members of the team were used to it. It is a little bit more complicated version of tf-idf. It is used for instance by ElasticSearch.
 \\ We run a script to build an index which lets to know the difference frequence of words in each file. It is then easy to know which products fits the best the query.
 
+  \begin{figure}[H]
+\center
+\includegraphics[width=0.5\textwidth]{lucence-flow}
+\caption{ Panorama built with three pictures}
+\end{figure}
 
 
     \end{block}
@@ -84,6 +98,7 @@ The task is thus to try to mimick the process made by a human rater to judge the
     \end{block}
 % 
  \begin{block}{Feature Engineering}
+\small
 We combined features based on Lucene together with traditional NLP features like words n-grams. Examples of our features are as follows:
 
 \begin{itemize}
@@ -93,13 +108,23 @@ We combined features based on Lucene together with traditional NLP features like
 \item fraction of 1-grams/ 2-grams from query in answer's description/title/brand/attributes
 \item average frequency of 1-grams/ 2-grams in answer's description/title 
 
-
 \end{itemize}
+
+\\
+\textbf{Example:}
+\\
 
     \end{block}
     % 
   \begin{block}{Ways of improvement}
-    Some content
+\small
+We understood that there was a lot of spelling mistakes in the descriptions and different ways to write different brand for example. By correcting those mistakes, the number of important words should increase: we belive that it could increase the performance of Lucene.
+\\
+\\
+We implemented a grid search to find the best hyperameters of our models but it could be a good idea to implement a simple cross validation to compare the influence of the different features on our score.
+\\
+\\
+Another way of improvement would be to try to combine our different machine learning algorithm to see if we can take advantage of their respective qualities.
     \end{block}
   \end{column}
   %
@@ -113,9 +138,18 @@ The idea of our agorithm was to build our own search engine and then try to see 
 \item nltk word tokenization: just tokenize the data
 \item stopwords removal: delete all the useless words in the description of the product
 \item porter stemming: our IR algorithm will be based of frequences of words: thus stemming lets to avoid having lot of different words of the same family with small frequences
+  \begin{figure}[H]
+\center
+\includegraphics[width=0.5\textwidth]{figure3}
+\caption{ Panorama built with three pictures}
+\end{figure}
 \item create a text fil for each product
 \end{itemize}
-   
+   \begin{figure}[H]
+\center
+\includegraphics[width=0.5\textwidth]{index}
+\caption{ Panorama built with three pictures}
+\end{figure}
     \end{block}
 
 
@@ -127,15 +161,17 @@ To try to train build our predicter on the different features we build we tried 
 \item Random Forest 
 \item Adaboost regressor
 In all cases, we implemented grid search to try to find best parameters
-
-
+\\
+Random forest is very fast to train and is is the algorithm which has given us the best score so far. 
 \end{itemize}
 
 
     \end{block} 
 
     \begin{block}{Conclusion}
-      Some Content
+\small
+This challenge is very interesting because the task is not only to find a very good search engine but to try to mimik the process of a human to determine if a document is relevant or not for a particular query. 
+\\ We hope to increase our score in the Kaggle leaderbord. However, because the scoresare very tight between the 400th and 800th we think we are on the right path.
     \end{block}
   \end{column}
  \end{columns}
