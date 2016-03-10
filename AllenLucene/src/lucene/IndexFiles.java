@@ -59,8 +59,8 @@ public class IndexFiles {
      * Index all text files under a directory.
      */
     public static void main(String[] args) {
-        String indexPath = "data/index_stem";
-        String docsPath = "data/files";
+        String indexPath = "data/index";
+        String docsPath = "data/files_new";
         boolean create = true;
 
         final Path docDir = Paths.get(docsPath);
@@ -74,7 +74,7 @@ public class IndexFiles {
             System.out.println("Indexing to directory '" + indexPath + "'...");
 
             Directory dir = FSDirectory.open(Paths.get(indexPath));
-            Analyzer analyzer = new ThoMiHiDoAnalyzer(); //new EnglishAnalyzer(); //new StandardAnalyzer();
+            Analyzer analyzer = new StandardAnalyzer(); //new EnglishAnalyzer(); //new StandardAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             if (create) {

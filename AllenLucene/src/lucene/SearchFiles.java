@@ -33,7 +33,7 @@ public class SearchFiles {
     private Vector<String> id = new Vector<>();
     private Vector<String> query = new Vector<>();
     private String field = "contents";
-    private Analyzer analyzer = new ThoMiHiDoAnalyzer(); //new EnglishAnalyzer(); //new StandardAnalyzer();
+    private Analyzer analyzer = new StandardAnalyzer(); //new EnglishAnalyzer(); //new StandardAnalyzer();
     private QueryParser parser = new QueryParser(field, analyzer);
     private IndexSearcher searcher;
 
@@ -42,7 +42,7 @@ public class SearchFiles {
      */
     public static void main(String[] args) throws Exception {
 
-        String index = "data/index_stem";
+        String index = "data/index";
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
         SearchFiles sf = new SearchFiles();
         sf.searcher = new IndexSearcher(reader);
@@ -104,9 +104,9 @@ public class SearchFiles {
     }
 
     public void calculateScores() throws Exception {
-        String dataPath = "data/test.csv";
+        String dataPath = "data/test_prep.csv";
         readData(dataPath);
-        String outputPath = "data/lucene_stem_test.csv";
+        String outputPath = "data/prep_lucene_test.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(outputPath));
 
         for (int i=0; i<id.size(); i++) {
