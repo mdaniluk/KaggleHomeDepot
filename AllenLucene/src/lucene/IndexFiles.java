@@ -60,7 +60,7 @@ public class IndexFiles {
      */
     public static void main(String[] args) {
         String indexPath = "data/index";
-        String docsPath = "data/files_new";
+        String docsPath = "data/files";
         boolean create = true;
 
         final Path docDir = Paths.get(docsPath);

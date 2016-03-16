@@ -47,7 +47,13 @@ public class SearchFiles {
         SearchFiles sf = new SearchFiles();
         sf.searcher = new IndexSearcher(reader);
 
-        sf.calculateScores();
+        String dataPath = "data/train.csv";
+        String outputPath = "data/lucene_train.csv";
+        sf.calculateScores(dataPath, outputPath);
+
+        dataPath = "data/test.csv";
+        outputPath = "data/lucene_test.csv";
+        sf.calculateScores(dataPath, outputPath);
         reader.close();
     }
 
@@ -103,10 +109,8 @@ public class SearchFiles {
         return scores;
     }
 
-    public void calculateScores() throws Exception {
-        String dataPath = "data/test_prep.csv";
+    public void calculateScores(String dataPath, String outputPath) throws Exception {
         readData(dataPath);
-        String outputPath = "data/prep_lucene_test.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(outputPath));
 
         for (int i=0; i<id.size(); i++) {

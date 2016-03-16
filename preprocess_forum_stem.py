@@ -6,25 +6,12 @@ Created on Fri Feb 26 11:16:03 2016
 """
 
 import pandas as pd
-import os
 import re
 
-from nltk.corpus import stopwords
-# from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
 
-stemmer = PorterStemmer()
-stop = stopwords.words('english')
-data_file = 'data/test.csv'
-lucene_file = 'AllenLucene/data/prep_lucene_test.csv'
-features_file = 'data/features_test.csv'
-relevance_file = 'data/relevance.csv'
 
-strNum = {'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,\
-        'seven':7,'eight':8,'nine':0}
-
-
-def load_train_and_desc():
+def load_train_and_desc(data_file, lucene_file):
     df_all = pd.read_csv(data_file)
     df_lucene_features = pd.read_csv(lucene_file, \
         names=['id', 'in_top_lucene', 'lucene_ranking_place', 'lucene_score'])
@@ -40,24 +27,6 @@ def load_train_and_desc():
     print 'data loaded'
     return (df_all, df_db, df_attr)
  
-   
-def create_files_for_lucene(df_db, df_attr, dist_dir='AllenLucene/data/files_new'):
-    if not os.path.exists(dist_dir):
-        os.makedirs(dist_dir)
-#    count = 0
-    for _, row in df_db.iterrows():
-        uid = row['product_uid']
-        attr_list = [str(row['brand']), str(row['product_description'])]
-        for _, a in df_attr[df_attr.product_uid == uid].iterrows():
-            attr_list.append(' : '.join([str(a['name']), str(a['value'])]))
-        content = ('\n'.join(attr_list))
-        
-        out = open(os.path.join(dist_dir, str(uid)), 'w')
-        out.write(str_stem(content))
-        out.close
-#        count += 1
-#        if count == 10:
-#            break
  
        
 def get_attributes_as_text(uid, df_attr):
@@ -99,6 +68,7 @@ def calculate_avg_tf(query, text, ngram):
 
     
 def safely_stem(word):
+    stemmer = PorterStemmer()
     try:
         return stemmer.stem(word)
     except UnicodeDecodeError:
@@ -106,6 +76,9 @@ def safely_stem(word):
  
    
 def str_stem(s): 
+    strNum = {'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,\
+        'seven':7,'eight':8,'nine':0}
+        
     if isinstance(s, str):
         s = re.sub(r"(\w)\.([A-Z])", r"\1 \2", s) #Split words with a.A
         s = s.lower()
@@ -172,36 +145,13 @@ def str_stem(s):
 def preprocess_text(text):
     try:
         text = str(text)
-#        text = text.decode('utf8')
         return str_stem(text)
-#        stemmer = PorterStemmer()
-#        words = word_tokenize(text)
-#        processed_text = []
-#        for w in words:
-#            if w not in stop:
-#                processed_text.append(stemmer.stem(w.lower()))
-#        return ' '.join(processed_text)
-    except Exception as e:
-        print '\nException!'
-        print e
-        print text
-        return ''
+    except Exception:
+        return ''  
         
-        
-def preprocess_queries():
-    df_train = pd.read_csv('data/train.csv')
-    df_train['search_term'] = df_train['search_term'].map(lambda x:str_stem(x))
-    df_train.to_csv('data/train_prep.csv', index=False)
-    df_test = pd.read_csv('data/test.csv')
-    df_test['search_term'] = df_test['search_term'].map(lambda x:str_stem(x))
-    df_test.to_csv('data/test_prep.csv', index=False)
-    
-    
-        
-if __name__ == '__main__':
-#    preprocess_queries()
-    df_all, df_db, df_attr = load_train_and_desc()
-    create_files_for_lucene(df_db, df_attr)
+
+def create_features(data_file, lucene_file, features_file, add_relevance=False):
+    df_all, df_db, df_attr = load_train_and_desc(data_file, lucene_file)
         
 #    df_all = df_all[:100]
     df_all['lucene_ranking_place'] = \
@@ -277,9 +227,21 @@ if __name__ == '__main__':
     'query_title_avg_1_gram_tf', 'query_title_avg_2_gram_tf', \
     'query_descr_avg_1_gram_tf', 'query_descr_avg_2_gram_tf']]
     
-#    df_relevance = df_all[['id', 'relevance']]
+    if (add_relevance):
+        df_relevance = df_all[['id', 'relevance']]
+        df_relevance.to_csv('data/relevance.csv', index=False)
     
     df_features.to_csv(features_file, index=False)
-#    df_relevance.to_csv(relevance_file, index=False)
+    
+        
+if __name__ == '__main__':
+    
+    create_features('data/train.csv', 'AllenLucene/data/lucene_train.csv', \
+    'data/features_train.csv', True)
+    create_features('data/test.csv', 'AllenLucene/data/lucene_test.csv', \
+    'data/features_test.csv', False)
+ 
+    
+    
 
         
