@@ -15,9 +15,9 @@ from nltk.stem.porter import PorterStemmer
 
 stemmer = PorterStemmer()
 stop = stopwords.words('english')
-data_file = 'data/train.csv'
-lucene_file = 'AllenLucene/data/prep_lucene_train.csv'
-features_file = 'data/features_train.csv'
+data_file = 'data/test.csv'
+lucene_file = 'AllenLucene/data/prep_lucene_test.csv'
+features_file = 'data/features_test.csv'
 relevance_file = 'data/relevance.csv'
 
 strNum = {'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,\
@@ -277,9 +277,9 @@ if __name__ == '__main__':
     'query_title_avg_1_gram_tf', 'query_title_avg_2_gram_tf', \
     'query_descr_avg_1_gram_tf', 'query_descr_avg_2_gram_tf']]
     
-    df_relevance = df_all[['id', 'relevance']]
+#    df_relevance = df_all[['id', 'relevance']]
     
     df_features.to_csv(features_file, index=False)
-    df_relevance.to_csv(relevance_file, index=False)
+#    df_relevance.to_csv(relevance_file, index=False)
 
         

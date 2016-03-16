@@ -15,9 +15,9 @@ from sklearn.ensemble import RandomForestRegressor,BaggingRegressor
 from sklearn.ensemble import AdaBoostRegressor
 
 def load_data():
-    df_x_train = pd.read_csv('data/train_features.csv')
-    df_y_train = pd.read_csv('data/train_relevance.csv')
-    df_x_test = pd.read_csv('data/test_features.csv')
+    df_x_train = pd.read_csv('data/features_train.csv')
+    df_y_train = pd.read_csv('data/relevance.csv')
+    df_x_test = pd.read_csv('data/features_test.csv')
     X = df_x_train.as_matrix()
     Y = df_y_train.as_matrix()
     Xt = df_x_test.as_matrix()
@@ -56,7 +56,7 @@ def random_forest(X,Y,Xt):
     
 def adaboost_regressor(X,Y,Xt):
     print('learn')
-    ada=GridSearchCV(AdaBoostRegressor(base_estimator=None, loss='square', random_state=0),cv=5,param_grid={'learning_rate':[0.001,0.01,0.1,1.0],'n_estimators':[40,50]})
+    ada=GridSearchCV(AdaBoostRegressor(loss='square', random_state=0),cv=5,param_grid={'learning_rate':[0.001,0.01,0.1,1.0],'n_estimators':[40,50]})
     ada.fit(X,Y)
     print('predict')
     Yp_clamped=ada.predict(Xt)
@@ -92,6 +92,6 @@ def learn_kernel_ridge(X,Y,Xt):
 if __name__ == '__main__':
     X,Y,Xt = load_data()
 
-    Yp = adaboost_regressor(X,Y,Xt)
+    Yp = random_forest(X,Y,Xt)
 
     save_submission(Yp)
