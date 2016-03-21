@@ -9,7 +9,7 @@ import pandas as pd
 import re
 
 from nltk.stem.porter import PorterStemmer
-
+from spell_check_dict import spell_check_dict
 
 def load_train_and_desc(data_file, lucene_file):
     df_all = pd.read_csv(data_file)
@@ -74,8 +74,20 @@ def safely_stem(word):
     except UnicodeDecodeError:
         return unicode(word, errors='ignore')
  
-   
+
+def correct_spell_mistakes(s):
+    if s in spell_check_dict.keys():
+#        print (s)
+        result = spell_check_dict[s]
+#        print result
+        return result
+    else:
+        return s
+        
+    
 def str_stem(s): 
+    s = correct_spell_mistakes(s)
+#    print s
     strNum = {'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,\
         'seven':7,'eight':8,'nine':0}
         
@@ -145,6 +157,7 @@ def str_stem(s):
 def preprocess_text(text):
     try:
         text = str(text)
+#        print text
         return str_stem(text)
     except Exception:
         return ''  
@@ -234,8 +247,7 @@ def create_features(data_file, lucene_file, features_file, add_relevance=False):
     df_features.to_csv(features_file, index=False)
     
         
-if __name__ == '__main__':
-    
+if __name__ == '__main__':  
     create_features('data/train.csv', 'AllenLucene/data/lucene_train.csv', \
     'data/features_train.csv', True)
     create_features('data/test.csv', 'AllenLucene/data/lucene_test.csv', \

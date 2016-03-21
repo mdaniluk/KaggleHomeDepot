@@ -48,9 +48,11 @@ def create_files_for_lucene(df_db, df_attr, dist_dir='AllenLucene/data/files'):
 #            break
         
 if __name__ == '__main__':
+    print "start"
     preprocess_queries()
     df_db, df_attr = load_products()
     create_files_for_lucene(df_db, df_attr)
+    print "end"
     
 
 
