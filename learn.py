@@ -92,6 +92,6 @@ def learn_kernel_ridge(X,Y,Xt):
 if __name__ == '__main__':
     X,Y,Xt = load_data()
 
-    Yp = random_forest(X,Y,Xt)
+    Yp = random_forest(X,Y.squeeze(),Xt)
 
     save_submission(Yp)
