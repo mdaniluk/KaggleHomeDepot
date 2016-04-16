@@ -7,6 +7,11 @@ Created on Fri Feb 26 11:16:03 2016
 
 import pandas as pd
 import re
+import word2vec
+import stopwords
+import nltk
+import numpy as np
+from scipy import linalg
 
 from nltk.stem.porter import PorterStemmer
 from spell_check_dict import spell_check_dict
@@ -66,6 +71,37 @@ def calculate_avg_tf(query, text, ngram):
     s /= float(len(q_bag))
     return float(s) / len(t_list)
 
+def get_embedding(text, model, stop, placeHolder):
+    for word in nltk.tokenize.word_tokenize(text.decode('utf8')):
+        if word in model and word not in stop:
+            placeHolder += model[word]
+                
+        #to avoid nan
+        if (np.count_nonzero(placeHolder) == 0):
+            return placeHolder
+            
+        placeHolder /= linalg.norm(placeHolder)
+        return placeHolder
+        
+def calculate_similarity(query, text, model_path):
+    embeddingSize = 300  
+    query_embedding =np.zeros((1,embeddingSize))  
+    stop = stopwords.get_stopwords('english')
+    model = word2vec.load(model_path)
+    query_embedding = get_embedding(query, model, stop, query_embedding)
+    
+    nword=0
+    score = 0.0
+    for word in nltk.tokenize.word_tokenize(text.decode('utf8')):
+        if word in model and word not in stop:
+            nword += 1
+            wordNorm = linalg.norm(model[word])
+            score += np.dot(query_embedding, model[word]) / wordNorm
+    
+    if nword!=0:
+        score = score / nword
+    print score[0]
+    return score[0]
     
 def safely_stem(word):
     stemmer = PorterStemmer()
@@ -232,13 +268,25 @@ def create_features(data_file, lucene_file, features_file, add_relevance=False):
         calculate_avg_tf(x['prepr_query'], x['prepr_descr'],2), \
         axis=1)
         
+    df_all['query_descr_similarity_word2vec'] = \
+        df_all.apply(lambda x: \
+        calculate_similarity(x['prepr_query'], x['prepr_descr'], 'data/model_allTokenized.bin'), \
+        axis=1)
+        
+    df_all['query_title_similarity_word2vec'] = \
+        df_all.apply(lambda x: \
+        calculate_similarity(x['prepr_query'], x['prepr_title'], 'data/model_allTokenized.bin'), \
+        axis=1)
+        
+        
     df_features = df_all[['id', 'lucene_ranking_place', 'lucene_score',\
     'query_title_common_1_gram', 'query_title_common_2_gram', \
     'query_descr_common_1_gram', 'query_descr_common_2_gram', \
     'query_attrs_common_1_gram', 'query_attrs_common_2_gram', \
     'query_brand_common_1_gram', 'query_brand_common_2_gram', \
     'query_title_avg_1_gram_tf', 'query_title_avg_2_gram_tf', \
-    'query_descr_avg_1_gram_tf', 'query_descr_avg_2_gram_tf']]
+    'query_descr_avg_1_gram_tf', 'query_descr_avg_2_gram_tf', \
+    'query_descr_similarity_word2vec', 'query_title_similarity_word2vec']]
     
     if (add_relevance):
         df_relevance = df_all[['id', 'relevance']]
